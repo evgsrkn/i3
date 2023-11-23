@@ -101,7 +101,7 @@ set $ws3 "3:  "
 set $ws4 "4:  "
 set $ws5 "5:  "
 set $ws6 "6:  "
-set $ws7 "7:  "
+set $ws7 "7:  "
 set $ws8 "8:  "
 set $ws9 "9:  "
 set $ws10 "10:  "
@@ -119,11 +119,12 @@ workspace $ws9 output HDMI-1-0
 workspace $ws10 output HDMI-1-0
 
 # assign windows to workspaces
-assign [class="firefox"] $ws1
+# assign [class="firefox"] $ws1
 assign [class="alacritty"] $ws2
 assign [class="idea"] $ws3
 assign [class="(?i)code"] $ws4
 assign [class="zoom"] $ws5
+assign [class="obsidian"] $ws7
 for_window [class="Spotify"] move to workspace $ws8
 assign [class="TelegramDesktop"] $ws9
 for_window [class="Slack"] move to workspace $ws10
@@ -230,11 +231,9 @@ bar {
 
 focus_follows_mouse no
 
-exec_always xinput set-prop 'Logitech G102 Prodigy Gaming Mouse' 326 0
-exec_always xrandr --output HDMI-1-0 --auto --rotate right --pos 1920x0 --output eDP-1 --auto --pos 0x840
-
+exec_always xinput set-prop 'Logitech G102 Prodigy Gaming Mouse' $(xinput list-props 'Logitech G102 Prodigy Gaming Mouse' | grep 'Natural Scrolling Enabled (' | awk '{print $5}' | awk '{print substr($1,2,3)}') 0
 exec --no-startup-id i3-msg 'workspace '$ws1'; exec firefox'
-exec --no-startup-id i3-msg 'workspace '$ws7'; exec gnome-calendar'
+exec --no-startup-id i3-msg 'workspace '$ws7'; exec obsidian'
 exec --no-startup-id i3-msg 'workspace '$ws8'; exec spotify'
 exec --no-startup-id i3-msg 'workspace '$ws9'; exec telegram-desktop'
 # exec --no-startup-id i3-msg 'workspace '$ws10'; exec slack'
@@ -281,7 +280,7 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl -- set-sink-volume @DEFA
 bindsym XF86AudioMute exec --no-startup-id pactl -- set-sink-mute @DEFAULT_SINK@ toggle # mute sound
 
 # Touchpad binding
-bindsym $mod+F6 exec --no-startup-id touchpad.sh
+bindsym $mod+F6 exec --no-startup-id ~/.config/i3/touchpad.sh
 
 # Brightness binding
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
@@ -291,12 +290,11 @@ exec_always feh --bg-fill Pictures/Wallpapers/sunset.jpg
 exec_always ssh-add -k ~/.ssh/github
 exec_always ssh-add -k ~/.ssh/evgsrkn
 exec_always ssh-add -k ~/.ssh/vps
-exec_always --no-startup-id setxkbmap -model pc105 -layout us,ru -option grp:alt_shift_toggle
+exec_always setxkbmap -model pc105 -layout us,ru -option grp:alt_shift_toggle
 exec_always --no-startup-id gnome-settings-daemon
-exec_always --no-startup-id xinput set-prop 'Logitech G102 Prodigy Gaming Mouse' 325 0
 
 for_window [class=".*"] border pixel 2
-
+for_window [title="Alarm - Mozilla Firefox"] floating enable,move absolute center,move workspace current
 
 # gaps outer 1
 # gaps inner 6
